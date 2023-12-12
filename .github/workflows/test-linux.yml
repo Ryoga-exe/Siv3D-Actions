@@ -10,7 +10,7 @@ on:
 env:
   SOLUTION_FILE_PATH: "./test/Linux"
   SIV3D_VERSION: "0.6.13"
-  APP_PATH: "./test/Linux/App"
+  APP_PATH: "./test/Linux"
 
 permissions:
   contents: read
@@ -34,8 +34,10 @@ jobs:
         name: App
         path: |
           ${{ env.APP_PATH }}
-          !${{ env.APP_PATH }}/engine
-          !${{ env.APP_PATH }}/AS_DEBUG
-          !${{ env.APP_PATH }}/Screenshot
-          !${{ env.APP_PATH }}/*.ico
-          !${{ env.APP_PATH }}/Resource.rc
+          !${{ env.APP_PATH }}/build
+          !${{ env.APP_PATH }}/resources
+          !${{ env.APP_PATH }}/.gitignore
+          !${{ env.APP_PATH }}/CMakeList.txt
+          !${{ env.APP_PATH }}/*.cpp
+          !${{ env.APP_PATH }}/*.hpp
+          !${{ env.APP_PATH }}/*.h

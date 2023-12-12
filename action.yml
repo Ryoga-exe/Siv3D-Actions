@@ -26,5 +26,8 @@ runs:
         build_configuration: ${{ inputs.build_configuration }}
     - name: Linux
       if: runner.os == 'Linux'
-      run: echo "[Linux] not implemented"
-      shell: bash
+      uses: ./src/linux
+      with:
+        siv3d-version: ${{ inputs.siv3d-version }}
+        solution-path: ${{ inputs.solution-path }}
+        build_configuration: ${{ inputs.build_configuration }}
