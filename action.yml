@@ -31,3 +31,6 @@ runs:
         siv3d-version: ${{ inputs.siv3d-version }}
         solution-path: ${{ inputs.solution-path }}
         build_configuration: ${{ inputs.build_configuration }}
+branding:
+  icon: 'box'
+  color: 'blue'
