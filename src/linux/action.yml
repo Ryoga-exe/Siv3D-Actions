@@ -40,7 +40,7 @@ runs:
     - name: Configure Siv3D
       working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
-        mkdir build && cd build
+        mkdir -p build && cd build
         cmake -GNinja -DCMAKE_BUILD_TYPE=${{ inputs.build_configuration }} ..
       shell: bash
 
@@ -59,7 +59,7 @@ runs:
     - name: Configure
       working-directory: ${{ inputs.solution-path }}
       run: |
-        mkdir build && cd build
+        mkdir -p build && cd build
         cmake -GNinja -DCMAKE_BUILD_TYPE=${{ inputs.build_configuration }} ..
       shell: bash
 
