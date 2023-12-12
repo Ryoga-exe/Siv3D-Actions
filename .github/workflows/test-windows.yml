@@ -1,0 +1,41 @@
+name: Test-Windows
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  SOLUTION_FILE_PATH: "./test/Windows"
+  SIV3D_VERSION: "0.6.13"
+  APP_PATH: "./test/Windows/App"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Siv3D and build
+      uses: Ryoga-exe/Siv3D-Actions@main
+      with:
+        siv3d-version: ${{ env.SIV3D_VERSION }}
+        solution-path: ${{ env.SOLUTION_FILE_PATH }}
+
+    - name: Publish App
+      uses: actions/upload-artifact@v3
+      with:
+        name: App-Windows
+        path: |
+          ${{ env.APP_PATH }}
+          !${{ env.APP_PATH }}/engine
+          !${{ env.APP_PATH }}/AS_DEBUG
+          !${{ env.APP_PATH }}/Screenshot
+          !${{ env.APP_PATH }}/*.ico
+          !${{ env.APP_PATH }}/Resource.rc

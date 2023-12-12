@@ -1,0 +1,29 @@
+name: Test-Linux
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  SOLUTION_FILE_PATH: "./test/Linux"
+  SIV3D_VERSION: "0.6.13"
+  APP_PATH: "./test/Linux/App"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Siv3D and build
+      uses: Ryoga-exe/Siv3D-Actions@main
+      with:
+        siv3d-version: ${{ env.SIV3D_VERSION }}
+        solution-path: ${{ env.SOLUTION_FILE_PATH }}
