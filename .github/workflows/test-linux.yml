@@ -31,7 +31,7 @@ jobs:
     - name: Publish App
       uses: actions/upload-artifact@v3
       with:
-        name: App
+        name: App-Linux
         path: |
           ${{ env.APP_PATH }}
           !${{ env.APP_PATH }}/build
