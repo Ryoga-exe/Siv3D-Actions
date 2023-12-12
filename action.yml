@@ -19,8 +19,11 @@ runs:
   steps:
     - name: Windows
       if: runner.os == 'Windows'
-      run: echo "[Windows] not implemented"
-      shell: pwsh
+      uses: ./src/action-windows
+      with:
+        siv3d-version: ${{ inputs.siv3d-version }}
+        solution-path: ${{ inputs.solution-path }}
+        build_configuration: ${{ inputs.build_configuration }}
     - name: Linux
       if: runner.os == 'Linux'
       run: echo "[Linux] not implemented"

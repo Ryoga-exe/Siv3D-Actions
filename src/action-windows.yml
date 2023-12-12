@@ -1,0 +1,33 @@
+name: Setup Siv3D and build Apps for Windows
+
+inputs:
+  siv3d-version:
+    description: "Siv3D version used in your project. Example: 0.6.13"
+    required: true
+  solution-path:
+    description: "Path to the solution file relative to the root of the project"
+    required: true
+  build_configuration:
+    description: "Configuration type to build"
+    required: false
+    default: Release
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.3.1
+    
+    - name: Download OpenSiv3D SDK
+      working-directory: "D:\\"
+      run: |
+        Invoke-WebRequest -Uri "https://siv3d.jp/downloads/Siv3D/manual/${{ inputs.siv3d-version }}/OpenSiv3D_SDK_${{ inputs.siv3d-version }}.zip" -OutFile "OpenSiv3D_SDK.zip"
+        7z x "OpenSiv3D_SDK.zip"
+      shell: pwsh
+
+    - name: MsBuild
+      working-directory: ${{ env.GITHUB_WORKSPACE }}
+      run: |
+        [Environment]::SetEnvironmentVariable("SIV3D_" + "${{ inputs.siv3d-version }}".Replace(".", "_"), "D:\OpenSiv3D_SDK_${{ inputs.siv3d-version }}")
+        msbuild /m /p:Configuration=${{ inputs.build_configuration }} ${{ inputs.solution-path }}
+      shell: pwsh
