@@ -35,7 +35,6 @@ jobs:
         path: |
           ${{ env.APP_PATH }}
           !${{ env.APP_PATH }}/build
-          !${{ env.APP_PATH }}/resources
           !${{ env.APP_PATH }}/.gitignore
           !${{ env.APP_PATH }}/CMakeList.txt
           !${{ env.APP_PATH }}/*.cpp
