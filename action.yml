@@ -19,7 +19,7 @@ runs:
   steps:
     - name: Windows
       if: runner.os == 'Windows'
-      uses: ./src/action-windows
+      uses: ./src/windows
       with:
         siv3d-version: ${{ inputs.siv3d-version }}
         solution-path: ${{ inputs.solution-path }}
