@@ -1,0 +1,25 @@
+name: Setup Siv3D and build Apps
+description: "GitHub Actions for Siv3D ♋ Setup Siv3D and build your apps."
+author: "Ryoga-exe"
+
+inputs:
+  siv3d-version:
+    description: "Siv3D version used in your project. Example: 0.6.13"
+    required: true
+  solution-path:
+    description: "Path to the solution file relative to the root of the project"
+    required: true
+  build_configuration:
+    description: "Configuration type to build"
+    required: false
+    default: Release
+
+runs:
+  using: "composite"
+  steps:
+    - name: Windows
+      if: ${{ env.RUNNER_OS == "Windows" }}
+      run: echo "[Windows] not implemented"
+    - name: Linux
+      if: ${{ env.RUNNER_OS == "Linux" }}
+      run: echo "[Linux] not implemented"
