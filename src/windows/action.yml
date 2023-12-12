@@ -23,7 +23,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: "D:\\OpenSiv3D_SDK_${{ inputs.siv3d-version }}"
-        key: siv3d-${{ inputs.siv3d-version }}
+        key: opensiv3d_sdk-${{ inputs.siv3d-version }}
     
     - name: Download OpenSiv3D SDK
       if: steps.cache-siv3d.outputs.cache-hit != 'true'
