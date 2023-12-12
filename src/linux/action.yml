@@ -22,27 +22,27 @@ runs:
       shell: bash
 
     - name: Download Siv3D
-      working-directory: ~
+      working-directory: ./tmp
       run: |
         wget https://github.com/Siv3D/OpenSiv3D/archive/refs/tags/v${{ inputs.siv3d-version }}.tar.gz
         tar xvzf v${{ inputs.siv3d-version }}.tar.gz
       shell: bash
 
     - name: Configure Siv3D
-      working-directory: ~/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
+      working-directory: ./tmp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
         mkdir build && cd build
         cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
       shell: bash
 
     - name: Build Siv3D
-      working-directory: ~/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
+      working-directory: ./tmp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
         cmake --build build
       shell: bash
 
     - name: Install Siv3D
-      working-directory: ~/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
+      working-directory: ./tmp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
         sudo cmake --install build
       shell: bash
