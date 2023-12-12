@@ -41,7 +41,7 @@ runs:
       working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
         mkdir build && cd build
-        cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+        cmake -GNinja -DCMAKE_BUILD_TYPE=${{ inputs.build_configuration }} ..
       shell: bash
 
     - name: Build Siv3D
@@ -60,7 +60,7 @@ runs:
       working-directory: ${{ inputs.solution-path }}
       run: |
         mkdir build && cd build
-        cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+        cmake -GNinja -DCMAKE_BUILD_TYPE=${{ inputs.build_configuration }} ..
       shell: bash
 
     - name: Build
