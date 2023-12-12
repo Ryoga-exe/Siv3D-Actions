@@ -27,3 +27,15 @@ jobs:
       with:
         siv3d-version: ${{ env.SIV3D_VERSION }}
         solution-path: ${{ env.SOLUTION_FILE_PATH }}
+
+    - name: Publish App
+      uses: actions/upload-artifact@v3
+      with:
+        name: App
+        path: |
+          ${{ env.APP_PATH }}
+          !${{ env.APP_PATH }}/engine
+          !${{ env.APP_PATH }}/AS_DEBUG
+          !${{ env.APP_PATH }}/Screenshot
+          !${{ env.APP_PATH }}/*.ico
+          !${{ env.APP_PATH }}/Resource.rc
