@@ -18,10 +18,10 @@ runs:
   using: "composite"
   steps:
     - name: Windows
-      if: runner.os == "Windows"
+      if: runner.os == 'Windows'
       run: echo "[Windows] not implemented"
       shell: pwsh
     - name: Linux
-      if: runner.os == "Linux"
+      if: runner.os == 'Linux'
       run: echo "[Linux] not implemented"
       shell: bash
