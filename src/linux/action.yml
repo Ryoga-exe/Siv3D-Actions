@@ -57,14 +57,14 @@ runs:
       shell: bash
 
     - name: Configure
+      working-directory: ${{ inputs.solution-path }}
       run: |
-        cd ${{ inputs.solution-path }}
         mkdir build && cd build
         cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
       shell: bash
 
     - name: Build
+      working-directory: ${{ inputs.solution-path }}
       run: |
-        cd ${{ inputs.solution-path }}
         cmake --build build
       shell: bash
