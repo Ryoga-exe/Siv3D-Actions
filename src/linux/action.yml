@@ -22,8 +22,8 @@ runs:
       shell: bash
 
     - name: Download Siv3D
-      working-directory: tmp
       run: |
+        mkdir tmp & cd tmp
         wget https://github.com/Siv3D/OpenSiv3D/archive/refs/tags/v${{ inputs.siv3d-version }}.tar.gz
         tar xvzf v${{ inputs.siv3d-version }}.tar.gz
       shell: bash
