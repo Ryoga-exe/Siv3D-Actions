@@ -1,0 +1,54 @@
+name: Setup Siv3D and build Apps for Linux
+
+inputs:
+  siv3d-version:
+    description: "Siv3D version used in your project. Example: 0.6.13"
+    required: true
+  solution-path:
+    description: "Path to the solution file relative to the root of the project"
+    required: true
+  build_configuration:
+    description: "Configuration type to build"
+    required: false
+    default: Release
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y ninja-build libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libboost-dev libcurl4-openssl-dev libgtk-3-dev libgif-dev libglu1-mesa-dev libharfbuzz-dev libmpg123-dev libopencv-dev libopus-dev libopusfile-dev libsoundtouch-dev libswresample-dev libtiff-dev libturbojpeg0-dev libvorbis-dev libwebp-dev libxft-dev uuid-dev xorg-dev
+
+    - name: Clone Siv3D
+      working-directory: ~
+      run: |
+        git clone https://github.com/Siv3D/OpenSiv3D.git
+
+    - name: Configure Siv3D
+      working-directory: ~/OpenSiv3D/Linux
+      run: |
+        mkdir build && cd build
+        cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+
+    - name: Build Siv3D
+      working-directory: ~/OpenSiv3D/Linux
+      run: |
+        cmake --build build
+
+    - name: Install Siv3D
+      working-directory: ~/OpenSiv3D/Linux
+      run: |
+        sudo cmake --install build
+
+    - name: Configure
+      working-directory: ${{ env.GITHUB_WORKSPACE }}/${{ inputs.solution-path }}
+      run: |
+        mkdir build && cd build
+        cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+
+
+    - name: Build
+      working-directory: ${{ env.GITHUB_WORKSPACE }}/${{ inputs.solution-path }}
+      run: |
+        cmake --build build
