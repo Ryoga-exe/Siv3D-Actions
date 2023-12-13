@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Setup Siv3D and build
-      uses: Ryoga-exe/Siv3D-Actions@latest
+      uses: Ryoga-exe/Siv3D-Actions@v1
       with:
         siv3d-version: ${{ env.SIV3D_VERSION }}
         solution-path: ${{ env.SOLUTION_FILE_PATH }}
