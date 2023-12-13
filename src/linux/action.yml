@@ -31,7 +31,7 @@ runs:
           echo "Latest Siv3D Version is ${siv3d_version}"
           echo "SIV3D_VERSION=${latest}" >> $GITHUB_OUTPUT
         else
-          echo "Siv3D Version is ${{ inputs.siv3d-version }}
+          echo "Siv3D Version is ${{ inputs.siv3d-version }}"
           echo "SIV3D_VERSION=${{ inputs.siv3d-version }}" >> $GITHUB_OUTPUT
         fi
       shell: bash
