@@ -22,7 +22,7 @@ runs:
     - name: Check Siv3D Version
       id: siv3d-version
       run: |
-        If ("${{ env.siv3d-version }}" -eq "auto") {
+        If ("${{ inputs.siv3d-version }}" -eq "auto") {
           $vcxproj = (Get-ChildItem -Recurse *.vcxproj).FullName
           $content = ""
           foreach($item in $vcxproj) { $content += (Get-Content $item) }
@@ -32,8 +32,8 @@ runs:
           "SIV3D_VERSION=${siv3d_version}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         }
         Else {
-          Write-Host "Siv3D Version is ${{ env.siv3d-version }}"
-          "SIV3D_VERSION=${{ env.siv3d-version }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Siv3D Version is ${{ inputs.siv3d-version }}"
+          "SIV3D_VERSION=${{ inputs.siv3d-version }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         }
       shell: pwsh
 
