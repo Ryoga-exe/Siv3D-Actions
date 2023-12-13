@@ -38,7 +38,7 @@ runs:
       shell: bash
 
     - name: Root suid tar
-      run: sudo chown root:wheel /bin/tar && sudo chmod u+s /bin/tar
+      run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
       shell: bash
 
     - name: Cache Siv3D Builds
