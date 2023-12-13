@@ -3,7 +3,8 @@ name: Setup Siv3D and build Apps for Linux
 inputs:
   siv3d-version:
     description: "Siv3D version used in your project. Example: 0.6.13"
-    required: true
+    required: false
+    default: auto
   solution-path:
     description: "Path to the solution file relative to the root of the project"
     required: true
@@ -22,19 +23,32 @@ runs:
         mkdir -p temp
       shell: bash
 
+    - name: Check Siv3D Version
+      id: siv3d-version
+      run: |
+        if [ "${{ inputs.siv3d-version }}" = "auto" ]; then
+          export latest-version=$(curl --silent "https://api.github.com/repos/Siv3D/OpenSiv3D/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed -E 's/v//')
+          echo "Latest Siv3D Version is ${siv3d_version}"
+          echo "SIV3D_VERSION=${latest}" >> $GITHUB_OUTPUT
+        else
+          echo "Siv3D Version is ${siv3d_version}"
+          echo "SIV3D_VERSION=${{ inputs.siv3d-version }}" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
     - name: Cache Siv3D
       id: cache-siv3d
       uses: actions/cache@v3
       with:
-        path: "./temp/OpenSiv3D-${{ inputs.siv3d-version }}"
-        key: siv3d-${{ inputs.siv3d-version }}
+        path: "./temp/OpenSiv3D-${{ steps.siv3d-version.outputs.SIV3D_VERSION }}"
+        key: siv3d-${{ steps.siv3d-version.outputs.SIV3D_VERSION }}
 
     - name: Download Siv3D
       if: steps.cache-siv3d.outputs.cache-hit != 'true'
       working-directory: ./temp
       run: |
-        wget https://github.com/Siv3D/OpenSiv3D/archive/refs/tags/v${{ inputs.siv3d-version }}.tar.gz
-        tar xvzf v${{ inputs.siv3d-version }}.tar.gz
+        wget https://github.com/Siv3D/OpenSiv3D/archive/refs/tags/v${{ steps.siv3d-version.outputs.SIV3D_VERSION }}.tar.gz
+        tar xvzf v${{ steps.siv3d-version.outputs.SIV3D_VERSION }}.tar.gz
       shell: bash
 
     - name: Root suid tar
@@ -49,11 +63,11 @@ runs:
           /usr/local/lib/libSiv3D.a
           /usr/local/lib/cmake/Siv3D
           /usr/local/include/Siv3D
-        key: siv3d-${{ inputs.siv3d-version }}-linux-${{ inputs.build_configuration }}
+        key: siv3d-${{ steps.siv3d-version.outputs.SIV3D_VERSION }}-linux-${{ inputs.build_configuration }}
 
     - name: Configure Siv3D
       if: steps.cache-siv3d-builds.outputs.cache-hit != 'true'
-      working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
+      working-directory: ./temp/OpenSiv3D-${{ steps.siv3d-version.outputs.SIV3D_VERSION }}/Linux
       run: |
         mkdir -p build && cd build
         cmake -GNinja -DCMAKE_BUILD_TYPE=${{ inputs.build_configuration }} ..
@@ -61,14 +75,14 @@ runs:
 
     - name: Build Siv3D
       if: steps.cache-siv3d-builds.outputs.cache-hit != 'true'
-      working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
+      working-directory: ./temp/OpenSiv3D-${{ steps.siv3d-version.outputs.SIV3D_VERSION }}/Linux
       run: |
         cmake --build build
       shell: bash
 
     - name: Install Siv3D
       if: steps.cache-siv3d-builds.outputs.cache-hit != 'true'
-      working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
+      working-directory: ./temp/OpenSiv3D-${{ steps.siv3d-version.outputs.SIV3D_VERSION }}/Linux
       run: |
         sudo cmake --install build
       shell: bash
