@@ -4,8 +4,9 @@ author: "Ryoga-exe"
 
 inputs:
   siv3d-version:
-    description: "Siv3D version used in your project. Example: 0.6.13"
-    required: true
+    description: "Siv3D version used in your project. Set \"auto\" to detect version (Windows) or use the latest version (Linux). Example: 0.6.13"
+    required: false
+    default: auto
   solution-path:
     description: "Path to the solution file relative to the root of the project"
     required: true
