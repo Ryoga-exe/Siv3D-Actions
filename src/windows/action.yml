@@ -35,6 +35,7 @@ runs:
           Write-Host "Siv3D Version is ${{ env.siv3d-version }}"
           "SIV3D_VERSION=${{ env.siv3d-version }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         }
+      shell: pwsh
 
     - name: Cache OpenSiv3D SDK
       id: cache-siv3d
