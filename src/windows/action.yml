@@ -2,7 +2,7 @@ name: Setup Siv3D and build Apps for Windows
 
 inputs:
   siv3d-version:
-    description: "Siv3D version used in your project. Example: 0.6.13"
+    description: "Siv3D version used in your project. Set \"auto\" to use detect version. Example: 0.6.13"
     required: false
     default: auto
   solution-path:
