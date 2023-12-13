@@ -37,7 +37,18 @@ runs:
         tar xvzf v${{ inputs.siv3d-version }}.tar.gz
       shell: bash
 
+    - name: Cache Siv3D Builds
+      id: cache-siv3d-builds
+      uses: actions/cache@v3
+      with:
+        path: |
+          /usr/local/lib/libSiv3D.a
+          /usr/local/lib/cmake/Siv3D
+          /usr/local/include/Siv3D
+        key: siv3d-${{ inputs.siv3d-version }}-linux-${{ inputs.build_configuration }}
+
     - name: Configure Siv3D
+      if: steps.cache-siv3d-builds.outputs.cache-hit != 'true'
       working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
         mkdir -p build && cd build
@@ -45,12 +56,14 @@ runs:
       shell: bash
 
     - name: Build Siv3D
+      if: steps.cache-siv3d-builds.outputs.cache-hit != 'true'
       working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
         cmake --build build
       shell: bash
 
     - name: Install Siv3D
+      if: steps.cache-siv3d-builds.outputs.cache-hit != 'true'
       working-directory: ./temp/OpenSiv3D-${{ inputs.siv3d-version }}/Linux
       run: |
         sudo cmake --install build
