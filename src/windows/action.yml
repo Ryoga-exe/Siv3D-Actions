@@ -3,7 +3,8 @@ name: Setup Siv3D and build Apps for Windows
 inputs:
   siv3d-version:
     description: "Siv3D version used in your project. Example: 0.6.13"
-    required: true
+    required: false
+    default: auto
   solution-path:
     description: "Path to the solution file relative to the root of the project"
     required: true
@@ -18,24 +19,41 @@ runs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.3.1
 
+    - name: Check Siv3D Version
+      id: siv3d-version
+      run: |
+        If ("${{ env.siv3d-version }}" -eq "auto") {
+          $vcxproj = (Get-ChildItem -Recurse *.vcxproj).FullName
+          $content = ""
+          foreach($item in $vcxproj) { $content += (Get-Content $item) }
+          $m = [regex]::Match($content, "SIV3D_\d*_\d*_\d*")
+          $siv3d_version = $m.Value -replace "^SIV3D_", "" -replace "_", "."
+          Write-Host "Siv3D Version is ${siv3d_version}"
+          "SIV3D_VERSION=${siv3d_version}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        }
+        Else {
+          Write-Host "Siv3D Version is ${{ env.siv3d-version }}"
+          "SIV3D_VERSION=${{ env.siv3d-version }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        }
+
     - name: Cache OpenSiv3D SDK
       id: cache-siv3d
       uses: actions/cache@v3
       with:
-        path: "D:\\OpenSiv3D_SDK_${{ inputs.siv3d-version }}"
-        key: opensiv3d_sdk-${{ inputs.siv3d-version }}
+        path: "D:\\OpenSiv3D_SDK_${{ steps.siv3d-version.outputs.SIV3D_VERSION }}"
+        key: opensiv3d_sdk-${{ steps.siv3d-version.outputs.SIV3D_VERSION }}
     
     - name: Download OpenSiv3D SDK
       if: steps.cache-siv3d.outputs.cache-hit != 'true'
       working-directory: "D:\\"
       run: |
-        Invoke-WebRequest -Uri "https://siv3d.jp/downloads/Siv3D/manual/${{ inputs.siv3d-version }}/OpenSiv3D_SDK_${{ inputs.siv3d-version }}.zip" -OutFile "OpenSiv3D_SDK.zip"
+        Invoke-WebRequest -Uri "https://siv3d.jp/downloads/Siv3D/manual/${{ steps.siv3d-version.outputs.SIV3D_VERSION }}/OpenSiv3D_SDK_${{ steps.siv3d-version.outputs.SIV3D_VERSION }}.zip" -OutFile "OpenSiv3D_SDK.zip"
         7z x "OpenSiv3D_SDK.zip"
       shell: pwsh
 
     - name: MsBuild
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: |
-        [Environment]::SetEnvironmentVariable("SIV3D_" + "${{ inputs.siv3d-version }}".Replace(".", "_"), "D:\OpenSiv3D_SDK_${{ inputs.siv3d-version }}")
+        [Environment]::SetEnvironmentVariable("SIV3D_" + "${{ steps.siv3d-version.outputs.SIV3D_VERSION }}".Replace(".", "_"), "D:\OpenSiv3D_SDK_${{ steps.siv3d-version.outputs.SIV3D_VERSION }}")
         msbuild /m /p:Configuration=${{ inputs.build_configuration }} ${{ inputs.solution-path }}
       shell: pwsh
