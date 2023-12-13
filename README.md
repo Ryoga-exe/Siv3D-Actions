@@ -12,7 +12,7 @@ Currently, supports Windows and Linux builds.
 ### Example workflow
 
 ```yml
-name: Build Siv3D App for Windows
+name: Build Siv3D App on Windows
 
 on:
   push:
