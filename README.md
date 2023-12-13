@@ -23,7 +23,6 @@ on:
 
 env:
   SOLUTION_FILE_PATH: "."
-  SIV3D_VERSION: "0.6.13"
   APP_PATH: "./App"
 
 permissions:
@@ -37,9 +36,8 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Setup Siv3D and build
-      uses: Ryoga-exe/Siv3D-Actions@v1
+      uses: Ryoga-exe/Siv3D-Actions@v2
       with:
-        siv3d-version: ${{ env.SIV3D_VERSION }}
         solution-path: ${{ env.SOLUTION_FILE_PATH }}
 
     - name: Publish App
