@@ -37,6 +37,10 @@ runs:
         tar xvzf v${{ inputs.siv3d-version }}.tar.gz
       shell: bash
 
+    - name: Root suid tar
+      run: sudo chown root:wheel /bin/tar && sudo chmod u+s /bin/tar
+      shell: bash
+
     - name: Cache Siv3D Builds
       id: cache-siv3d-builds
       uses: actions/cache@v3
